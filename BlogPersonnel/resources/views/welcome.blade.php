@@ -110,7 +110,7 @@
     <div class="nav-links">
         <a href="{{ route('articles.index') }}">📝 Articles</a>
         @auth
-            <a href="{{ route('admin.dashboard') }}">⚙️ Dashboard</a>
+            <a href="{{ route('dashboard') }}">⚙️ Dashboard</a>
         @else
             <a href="{{ route('login') }}">🔐 Connexion</a>
         @endauth
@@ -136,14 +136,17 @@
     <p class="version">Laravel v13 · BlogPersonnel © 2026</p>
 
     <script>
-        // Après 2.5s → redirect vers articles
+    setTimeout(() => {
+        document.getElementById('status').textContent = 'Prêt !';
         setTimeout(() => {
-            document.getElementById('status').textContent = 'Prêt !';
-            setTimeout(() => {
-                window.location.href = "{{ route('login') }}";
-            }, 500);
-        }, 2500);
-    </script>
+            @auth
+                window.location.href = "{{ route('dashboard') }}";
+            @else
+                window.location.href = "{{ route('articles.index') }}";
+            @endauth
+        }, 500);
+    }, 2500);
+</script>
 
 </body>
 </html>
