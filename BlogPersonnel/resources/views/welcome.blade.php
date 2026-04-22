@@ -110,7 +110,7 @@
     <div class="nav-links">
         <a href="{{ route('articles.index') }}">📝 Articles</a>
         @auth
-            <a href="{{ route('dashboard') }}">⚙️ Dashboard</a>
+            <a href="{{ route('admin.dashboard') }}">⚙️ Dashboard</a>
         @else
             <a href="{{ route('login') }}">🔐 Connexion</a>
         @endauth
@@ -140,7 +140,7 @@
         document.getElementById('status').textContent = 'Prêt !';
         setTimeout(() => {
             @auth
-                window.location.href = "{{ route('dashboard') }}";
+                window.location.href = "{{ route('admin.dashboard') }}";
             @else
                 window.location.href = "{{ route('articles.index') }}";
             @endauth
