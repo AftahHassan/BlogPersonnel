@@ -23,7 +23,7 @@
             </div>
         @endif
 
-        <form action="{{ route('admin.articles.update', $article) }}" method="POST">
+        <form action="{{ route('admin.articles.update', $article) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -77,6 +77,26 @@
                     {{ old('content', $article->content) }}
                 </textarea>
             </div>
+
+            {{-- Image actuelle --}}
+            @if($article->image)
+                <div class="form-group">
+                    <label>Image actuelle</label>
+                    <img src="{{ asset('storage/' . $article->image) }}"
+                        style="width:100%; height:200px; object-fit:cover;
+                                border-radius:8px; margin-bottom:10px;">
+                </div>
+            @endif
+
+            {{-- Nouvelle image --}}
+            <div class="form-group">
+                <label>Changer l'image (optionnel)</label>
+                <input type="file" name="image" accept="image/*"
+                    style="width:100%; padding:10px; border:1px solid #e2e8f0;
+                            border-radius:8px;">
+            </div>
+         
+
 
             {{-- Bouton --}}
             <button type="submit"

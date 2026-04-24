@@ -23,7 +23,8 @@
             </div>
         @endif
 
-        <form action="{{ route('admin.articles.store') }}" method="POST">
+        <form action="{{ route('admin.articles.store') }}" method="POST" enctype="multipart/form-data">
+            
             @csrf
 
             {{-- Titre --}}
@@ -73,6 +74,15 @@
                           style="width: 100%; padding: 10px 14px; border: 1px solid #e2e8f0;
                                  border-radius: 8px; font-size: 0.95rem; resize: vertical;"
                           placeholder="Écris ton article ici...">{{ old('content') }}</textarea>
+            </div>
+
+
+            {{-- Image --}}
+            <div class="form-group">
+                <label>Image (optionnel)</label>
+                <input type="file" name="image" accept="image/*"
+                    style="width:100%; padding:10px; border:1px solid #e2e8f0;
+                            border-radius:8px;">
             </div>
 
             {{-- Bouton --}}
