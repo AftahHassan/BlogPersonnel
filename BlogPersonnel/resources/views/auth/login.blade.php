@@ -1,47 +1,123 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion — BlogPersonnel</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f1f5f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 420px;
+        }
+        .login-box h1 {
+            font-size: 1.6rem;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+        .login-box p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 28px;
+        }
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 6px;
+        }
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            margin-bottom: 18px;
+            outline: none;
+            transition: border 0.2s;
+        }
+        input:focus { border-color: #f97316; }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #f97316;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn:hover { background: #ea6c0a; }
+        .error {
+            color: #ef4444;
+            font-size: 0.8rem;
+            margin-top: -12px;
+            margin-bottom: 12px;
+        }
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 24px;
+            display: block;
+        }
+        .logo span { color: #f97316; }
+    </style>
+</head>
+<body>
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+    <div class="login-box">
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+        <span class="logo">Blog<span>Personnel</span></span>
+        <h1>🔐 Connexion</h1>
+        <p>Accès réservé à l'administrateur</p>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+        {{-- Session Status --}}
+        @if (session('status'))
+            <div style="color: green; margin-bottom: 16px; font-size: 0.9rem;">
+                {{ session('status') }}
+            </div>
+        @endif
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+            {{-- Email --}}
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email"
+                   value="{{ old('email') }}" required autofocus />
+            @error('email')
+                <p class="error">{{ $message }}</p>
+            @enderror
 
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
+            {{-- Password --}}
+            <label for="password">Mot de passe</label>
+            <input type="password" id="password" name="password" required />
+            @error('password')
+                <p class="error">{{ $message }}</p>
+            @enderror
 
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
+            <button type="submit" class="btn">Se connecter</button>
 
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+        </form>
+
+    </div>
+
+</body>
+</html>

@@ -32,25 +32,33 @@ class ArticleController extends Controller
 
     // Sauvegarder nouvel article
     public function store(Request $request)
-    {
-        $request->validate([
-            'title'       => 'required|max:255',
-            'content'     => 'required',
-            'category_id' => 'required|exists:categories,id',
-            'status'      => 'required|in:draft,published',
-        ]);
+{
+    $request->validate([
+        'title'       => 'required|max:255',
+        'content'     => 'required',
+        'category_id' => 'required|exists:categories,id',
+        'status'      => 'required|in:draft,published',
+        'image'       => 'nullable|image|max:2048',
+    ]);
 
-        Article::create([
-            'title'       => $request->title,
-            'content'     => $request->content,
-            'category_id' => $request->category_id,
-            'status'      => $request->status,
-            'user_id'     => auth()->id(),
-        ]);
-
-        return redirect()->route('admin.dashboard')
-                         ->with('success', 'Article créé avec succès !');
+    $imagePath = null;
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')
+                             ->store('articles', 'public');
     }
+
+    Article::create([
+        'title'       => $request->title,
+        'content'     => $request->content,
+        'category_id' => $request->category_id,
+        'status'      => $request->status,
+        'user_id'     => auth()->id(),
+        'image'       => $imagePath,
+    ]);
+
+    return redirect()->route('admin.dashboard')
+                     ->with('success', 'Article créé !');
+}
 
     // Formulaire modification
     public function edit(Article $article)
@@ -60,25 +68,33 @@ class ArticleController extends Controller
     }
 
     // Mettre à jour article
-    public function update(Request $request, Article $article)
-    {
-        $request->validate([
-            'title'       => 'required|max:255',
-            'content'     => 'required',
-            'category_id' => 'required|exists:categories,id',
-            'status'      => 'required|in:draft,published',
-        ]);
+        public function update(Request $request, Article $article)
+{
+    $request->validate([
+        'title'       => 'required|max:255',
+        'content'     => 'required',
+        'category_id' => 'required|exists:categories,id',
+        'status'      => 'required|in:draft,published',
+        'image'       => 'nullable|image|max:2048',
+    ]);
 
-        $article->update([
-            'title'       => $request->title,
-            'content'     => $request->content,
-            'category_id' => $request->category_id,
-            'status'      => $request->status,
-        ]);
-
-        return redirect()->route('admin.dashboard')
-                         ->with('success', 'Article modifié avec succès !');
+    $imagePath = $article->image; // garde l'ancienne image
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')
+                             ->store('articles', 'public');
     }
+
+    $article->update([
+        'title'       => $request->title,
+        'content'     => $request->content,
+        'category_id' => $request->category_id,
+        'status'      => $request->status,
+        'image'       => $imagePath,
+    ]);
+
+    return redirect()->route('admin.dashboard')
+                     ->with('success', 'Article modifié !');
+}
 
     // Supprimer article
     public function destroy(Article $article)
