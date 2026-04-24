@@ -31,7 +31,8 @@
         <a href="{{ route('home') }}" class="logo">Blog<span>Personnel</span></a>
         <div class="links">
             <a href="{{ route('articles.index') }}">📝 Articles</a>
-            {{-- Pas de bouton login ici --}}
+            <a href="{{ route('login') }}" class="btn-primary">🔐 Connexion</a>
+            
         </div>
     </nav>
 
